@@ -1,20 +1,38 @@
+
+<script setup>
+  import q from "./data/quizes.json"
+  import {ref, watch} from "vue";
+
+  import Card from "./components/Card.vue"
+
+  const quizes = ref(q)
+  const search = ref("")
+
+  watch(search, () => {
+    quizes.value = q.filter(quiz => quiz.name.toLowerCase().includes(search.value.toLowerCase()))
+  })
+  
+</script>
+
 <template>
+  <!-- {{ q }} -->
   <div class="container">
     <header>
       <h1>Quizes</h1>
-      <input type="text" placeholder="search ..." name="" id="">
+      <input v-model.trim="search" type="text" placeholder="search ..." name="" id="">
     </header>
 
     <div class="options-container">
-      <div class="card">
-        <img src="https://epe.brightspotcdn.com/dims4/default/1e49415/2147483647/strip/true/crop/2956x2006+22+0/resize/840x570!/quality/90/?url=https%3A%2F%2Fepe-brightspot.s3.us-east-1.amazonaws.com%2F02%2Fac%2Fa5498e524778b568fea054141968%2Fmath-102023-1281244731-01.jpg" alt="">
+      <Card v-for="quiz in quizes" :key="quiz.id" :quiz="quiz" />
+      <!-- <div v-for="quiz in quizes" :key="quiz.id" class="card">
+        <img :src="quiz.img" alt="">
         <div class="card-text">
-          <h2>Math</h2>
+          <h2>{{ quiz.name }}</h2>
           <p>
-            15 Questions
+            {{ quiz.questions.length }} Questions
           </p>
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
@@ -48,29 +66,6 @@
     /* display: flex;
     flex-wrap: wrap; */
     margin-top: 40px;
-  }
-
-
-  .card{
-    width: 310px;
-    overflow: hidden;
-    border-radius: 2%;
-    box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.1);
-    margin-bottom: 35px;
-    margin-right: 20px;
-    cursor: pointer;
-  }
-  .card img{
-    width: 100%;
-    height: 190px;
-    margin: 0;
-  }
-
-  .card .card-text{
-    padding: 0 5px;
-  }
-  .card .card-text h2 {
-    font-weight: bold;
   }
   
 </style>
